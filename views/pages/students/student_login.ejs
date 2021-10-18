@@ -1,0 +1,22 @@
+<%- include('../../partials/header.ejs', {user: "Student", register_link: "/students/register", login_link: "/students/login"})  %>
+    <div class="container card" style="margin-top: 5%;">
+        <div class="card-body">
+            <form class="row g-3" method="POST" action="/students/login">
+                <div class="col-md-6">
+                    <label for="email" id="email" class="form-label">Email</label>
+                    <input type="text" name="email" class="form-control" id="email" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="password" id="password" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" required>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <%- include('../../partials/footer.ejs') %>

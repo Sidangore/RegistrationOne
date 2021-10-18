@@ -6,7 +6,7 @@ const {
 
 // GET Login
 router.get('/login', async(req, res) => {
-    res.render('pages/login');
+    res.render('pages/students/student_login');
 });
 // POST Login
 router.post('/login', async(req, res) => {
@@ -16,7 +16,7 @@ router.post('/login', async(req, res) => {
 
 // GET signup
 router.get('/register', async(req, res) => {
-    res.render('pages/register');
+    res.render('pages/students/student_register');
 });
 // POST Register
 router.post('/register', async(req, res) => {
