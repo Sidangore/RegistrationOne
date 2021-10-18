@@ -5,23 +5,34 @@ const cors = require('cors'); // to handle the middlewares
 const consola = require('consola'); // to show banners in console
 const passport = require('passport'); // authentication middleware
 
-const app = express();
-app.set("view engine", "ejs");
+const student_app = express();
+const school_app = express();
+
+student_app.set("view engine", "ejs");
+school_app.set("view engine", "ejs");
 
 //bring the constants from env
-const { URL, PORT } = require('./config');
+const { URL, STUDENT_PORT, SCHOOL_PORT } = require('./config');
 
 // Middlewares
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+student_app.use(cors());
+student_app.use(express.urlencoded({ extended: true }));
+student_app.use(express.json());
+
+school_app.use(cors());
+school_app.use(express.urlencoded({ extended: true }));
+school_app.use(express.json());
 // app.use(body_parser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    res.render('pages/index');
+student_app.get("/", (req, res) => {
+    res.render('pages/students/student_index');
+});
+school_app.get("/", (req, res) => {
+    res.render('pages/schools/school_index');
 });
 //user middle ware
-app.use('/students', require('./routes/student.routes'));
+student_app.use('/students', require('./routes/student.routes'));
+school_app.use('/schools', require('./routes/school.routes'));
 
 //connect to DB and start the app
 const start_app = async() => {
@@ -37,13 +48,22 @@ const start_app = async() => {
         });
 
         //listen to the port
-        app.listen(PORT, () => {
+        student_app.listen(STUDENT_PORT, () => {
             consola.success({
-                message: `Successfully listening to Port @ ${PORT}`,
+                message: `Successfully listening to Student Port @ ${STUDENT_PORT}`,
                 success: true,
                 badge: true
             });
         });
+
+        school_app.listen(SCHOOL_PORT, () => {
+            consola.success({
+                message: `Successfully listening to School Port @ ${SCHOOL_PORT}`,
+                success: true,
+                badge: true
+            });
+        });
+
     } catch (error) {
         consola.error({
             message: error,
