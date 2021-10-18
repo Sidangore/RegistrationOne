@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken'); // the jwt functionality
 const School = require('../models/school.model');
 const IdentificationNumber = require('../models/school_identification.model');
 const { success, error } = require('consola');
-
-// const { SECRET } = require('../config');
+const { SECRET } = require('../config');
 
 // const passport = require('passport'); // authentication middleware functionality
 
@@ -59,63 +58,61 @@ const school_registration = async(school_details, res) => {
 };
 
 // student login function 
-// const school_login = async(school_details, res) => {
-//     try {
-//         // check for the email in DB
-//         const student_is_present = await validate_email(student_details.email);
+const school_login = async(school_details, res) => {
+    try {
+        // check for the email in DB
+        const school_is_present = await validate_email(school_details.email);
 
-//         if (!student_is_present) {
-//             return res.status(404).json({
-//                 message: `Email not found!`,
-//                 success: false
-//             });
-//         }
+        if (!school_is_present) {
+            return res.status(404).json({
+                message: `Email not found!`,
+                success: false
+            });
+        }
 
-//         const student = await Student.findOne({
-//             email: student_details.email
-//         });
+        const school = await School.findOne({
+            email: school_details.email
+        });
 
-//         if (student.role !== "student") {
-//             return res.status(403).json({
-//                 message: `This email is not for student access`,
-//                 success: false
-//             });
-//         }
+        // if (school.role !== "student") {
+        //     return res.status(403).json({
+        //         message: `This email is not for student access`,
+        //         success: false
+        //     });
+        // }
 
-//         // now the student is valid therefore check the password
-//         let password_is_correct = await bcryptjs.compare(student_details.password, student.password);
+        // now the school is valid therefore check the password
+        let password_is_correct = await bcryptjs.compare(school_details.password, school.password);
 
-//         if (password_is_correct) {
-//             //sign the token and issue it to the student
-//             let token = jwt.sign({
-//                 student_id: student._id,
-//                 role: student.role,
-//                 email: student.email,
-//                 aadhar_number: student.aadhar_number
-//             }, SECRET, {
-//                 expiresIn: "7 days"
-//             });
+        if (password_is_correct) {
+            //sign the token and issue it to the student
+            let token = jwt.sign({
+                school_id: school._id,
+                email: school.email,
+                identification_number: school.identification_number
+            }, SECRET, {
+                expiresIn: "7 days"
+            });
 
-//             let result = {
-//                 email: student.email,
-//                 role: student.role,
-//                 token: `Bearer ${token}`,
-//                 expiresIn: 168
-//             }
+            let result = {
+                email: school.email,
+                token: `Bearer ${token}`,
+                expiresIn: 168
+            }
 
-//             return res.status(200).json({
-//                 ...result,
-//                 message: `You are logged in as ${student.email}`,
-//                 success: true
-//             });
-//         }
-//     } catch (error) {
-//         return res.status(403).json({
-//             message: `Incorrect Password with Error : ${error}`,
-//             success: false
-//         });
-//     }
-// };
+            return res.status(200).json({
+                ...result,
+                message: `You are logged in as ${school.email}`,
+                success: true
+            });
+        }
+    } catch (error) {
+        return res.status(403).json({
+            message: `Incorrect Password with Error : ${error}`,
+            success: false
+        });
+    }
+};
 
 //validate the identification number
 const validate_identification_number = async(identification_number) => {
@@ -141,5 +138,5 @@ const validate_email = async(email) => {
 };
 module.exports = {
     school_registration,
-    // student_login
+    school_login
 };

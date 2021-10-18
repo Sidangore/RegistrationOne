@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { school_registration } = require('../utils/school.auth.utils');
+const { school_registration, school_login } = require('../utils/school.auth.utils');
 
 // REGISTRATION OF SCHOOLS
 router.get('/register', async(req, res) => {
@@ -12,11 +12,11 @@ router.post('/register', async(req, res) => {
 
 // LOGIN OF SCHOOLS
 router.get('/login', async(req, res) => {
-
+    res.render('pages/schools/school_login');
 });
 
 router.post('/login', async(req, res) => {
-
+    await school_login(req.body, res);
 });
 
 module.exports = router;
