@@ -1,10 +1,10 @@
 // const Web3 = require('web3');
 App = {
     web3_provider: null,
-    account: '0x0',
-    message: '0x0',
-    signature: '0x0',
-    nonce: 12345,
+    account: '',
+    message: '',
+    signature: '',
+    nonce: '12345',
 
     //functions
     init: () => {
@@ -14,7 +14,10 @@ App = {
     init_web3: async() => {
         if (typeof window.ethereum !== 'undefined') {
             //metamask is installed
-
+            //get the account
+            account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            App.web3_provider = window.ethereum
+            web3 = new Web3(window.ethereum);
 
         } else {
             // metamast is not installed
@@ -24,10 +27,21 @@ App = {
     },
 
     fetch_account: async() => {
-        const public_address = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        //get the public address 
+        // const public_address = await window.ethereum.request({ method: 'eth_requestAccounts' });
         // console.log(public_address);
-        document.getElementById("public_address").value = public_address;
-    }
+        document.getElementById("public_address").value = account;
+    },
+
+    sign_message_metamask: async() => {
+        const message = `This is to authenticate myself to the portal with Nonce: ${App.nonce}`;
+        console.log(message + " to sign up");
+        //sign the message
+        const signature = await ethereum.request({ method: "personal_sign", params: [message, ethereum.selectedAddress, ""] });
+        document.getElementById("signature").innerHTML = "Signature:" +
+            signature;
+
+    },
 };
 
 

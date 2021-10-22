@@ -46,6 +46,7 @@
                     <label for="public_address" class="form-label">Ethereum Public Address</label>
                     <input type="text" class="form-control" name="public_address" id="public_address" name="public_address" placeholder="No Account Found" required style="margin-bottom: 2%;">
                     <button role="button" class="btn btn-outline-danger" onclick="App.fetch_account();" id="fetch_metamask_button">Fetch MetaMask</button>
+                    <button role="button" class="btn btn-outline-success" onclick="App.sign_message_metamask();" id="sign_message_button">Sign Message</button>
                     <!-- <a class="btn btn-outline-primary" onclick="" id="fetch_metamask_button" role="button">Fetch MetaMask Account</a> -->
 
                 </div>
@@ -53,6 +54,18 @@
                 <div class="col-md-4">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+
+                <div class="col-md-4">
+                    <div class="row">
+                        <p id="signature">Signature:</p>
+                    </div>
+                    <div class="row">
+                        <p id="verified">Verified: Pending</p>
+                    </div>
                 </div>
 
                 <!-- <div class="col-md-3">
