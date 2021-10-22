@@ -4,16 +4,30 @@ const Student = require('../models/student.model');
 const { success, error } = require('consola');
 const { SECRET } = require('../config');
 
+const Web3 = require('web3');
+const web3 = new Web3('HTTP://127.0.0.1:7545');
+
+
+const PublicAddress = require('../models/address_list.model');
+
 // const passport = require('passport'); // authentication middleware functionality
 
 // register the user to portal function
 const student_registration = async(student_details, res) => {
     try {
-        // validate the aadhar 
+        //validate the public address
+        let public_address_taken = await validate_public_address(student_details.public_address);
+        if (public_address_taken) {
+            return res.status(400).json({
+                message: `Address already in use`,
+                success: false
+            });
+        }
+        // validate the aadhar
         let aadhar_number_taken = await validate_aadhar_number(student_details.aadhar_number);
         if (aadhar_number_taken) {
             return res.status(400).json({
-                message: `Aadhar alredy registered`,
+                message: `Aadhar already registered`,
                 success: false
             });
         }
@@ -30,19 +44,29 @@ const student_registration = async(student_details, res) => {
         // if it passes the email and aadhar validation the hash the password
         const password = await bcryptjs.hash(student_details.password, 12);
 
+        const nonce = 12345;
+
         // create the new student
         const new_student = new Student({
             ...student_details,
-            password
+            password: password,
+            nonce: nonce
         });
 
         //save the new student
         await new_student.save();
 
+        //save the new students address to public_address_DB
+        await new PublicAddress({
+            public_address: student_details.public_address
+        }).save();
+
         // return res.status(200).json({
         //     message: `Student is now registerd!`,
         //     success: true
         // });
+
+        //display the success message
         success({
             message: "A Student registered successfully!",
             badge: true
@@ -76,6 +100,15 @@ const student_login = async(student_details, res) => {
         if (student.role !== "student") {
             return res.status(403).json({
                 message: `This email is not for student access`,
+                success: false
+            });
+        }
+
+        //check the ethereum address used
+        const correct_public_address = await validate_public_address(student.public_address);
+        if (!correct_public_address) {
+            return res.status(403).json({
+                message: `This Public Address is not Associated with the Student `,
                 success: false
             });
         }
@@ -131,6 +164,20 @@ const validate_email = async(email) => {
     });
     return student ? true : false;
 };
+
+//validate the public address
+const validate_public_address = async(public_address) => {
+    let student = await Student.findOne({
+        public_address
+    });
+    return student ? true : false;
+};
+
+// add the public address to common DB of registered address
+// const add_public_address = async(public_address) => {
+
+// };
+
 module.exports = {
     student_registration,
     student_login

@@ -16,6 +16,14 @@ const studentSchema = new Schema({
         type: String,
         required: true
     },
+    public_address: {
+        type: String,
+        required: true
+    },
+    nonce: {
+        type: Number,
+        required: true
+    },
     role: {
         type: String,
         default: "student"
