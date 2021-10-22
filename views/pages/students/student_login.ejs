@@ -1,10 +1,40 @@
 <%- include('../../partials/header.ejs', {user: "Student", register_link: "/students/register", login_link: "/students/login"})  %>
+
     <div class="container card" style="margin-top: 5%;">
         <div class="card-body">
             <form class="row g-3" method="POST" action="/students/login">
                 <div class="col-md-6">
                     <label for="email" id="email" class="form-label">Email</label>
                     <input type="text" name="email" class="form-control" id="email" required>
+                </div>
+                <!-- ethereum address fetcher -->
+                <div class="col-md-4">
+                    <label for="public_address" class="form-label">Ethereum Public Address</label>
+                    <input type="text" class="form-control" name="public_address" id="public_address" name="public_address" placeholder="Insert you Public Address" required>
+                    <button class="btn btn-outline-primary" onclick="" id="fetch_metamask_button">Fetch MetaMask</button>
+                    <!-- <a class="btn btn-outline-primary" onclick="" id="fetch_metamask_button" role="button">Fetch MetaMask Account</a> -->
+                    <script>
+                        const fetch_metamask_button = document.getElementById('fetch_metamask_button');
+
+                        function fetch_metamask_button_toggle() {
+                            if (!window.ethereum) {
+                                // metamsk is not installed
+                                fetch_metamask_button.innerText = 'MetaMask is not installed';
+                                fetch_metamask_button.classList.replace('btn-primary', 'btn-outline-danger');
+                                return false;
+                            }
+                            fetch_metamask_button.addEventListener('click', async() => {
+                                const public_address = await window.ethereum.request({
+                                    method: 'eth_requestAccounts'
+                                });
+                                document.getElementById('public_address').value = public_address;
+
+                            });
+                        }
+                        window.addEventListener('DOMContentLoaded', () => {
+                            fetch_metamask_button_toggle();
+                        });
+                    </script>
                 </div>
                 <div class="col-md-6">
                     <label for="password" id="password" class="form-label">Password</label>

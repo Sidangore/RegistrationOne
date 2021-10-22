@@ -19,6 +19,8 @@ student_app.use(cors());
 student_app.use(express.urlencoded({ extended: true }));
 student_app.use(express.json());
 
+student_app.use(express.static(__dirname + '/views'));
+
 school_app.use(cors());
 school_app.use(express.urlencoded({ extended: true }));
 school_app.use(express.json());
