@@ -10,10 +10,10 @@
                 <!-- ethereum address fetcher -->
                 <div class="col-md-4">
                     <label for="public_address" class="form-label">Ethereum Public Address</label>
-                    <input type="text" class="form-control" name="public_address" id="public_address" name="public_address" placeholder="Insert you Public Address" required>
-                    <button class="btn btn-outline-primary" onclick="" id="fetch_metamask_button">Fetch MetaMask</button>
+                    <input type="text" class="form-control" name="public_address" id="public_address" name="public_address" placeholder="Insert you Public Address" required style="margin-bottom: 2%;">
+                    <button class="btn btn-outline-primary" onclick="App.fetch_account();" id="fetch_metamask_button">Fetch MetaMask</button>
                     <!-- <a class="btn btn-outline-primary" onclick="" id="fetch_metamask_button" role="button">Fetch MetaMask Account</a> -->
-                    <script>
+                    <!-- <script>
                         const fetch_metamask_button = document.getElementById('fetch_metamask_button');
 
                         function fetch_metamask_button_toggle() {
@@ -34,7 +34,7 @@
                         window.addEventListener('DOMContentLoaded', () => {
                             fetch_metamask_button_toggle();
                         });
-                    </script>
+                    </script> -->
                 </div>
                 <div class="col-md-6">
                     <label for="password" id="password" class="form-label">Password</label>
@@ -48,5 +48,5 @@
         </div>
 
     </div>
-
+    <script src="../pages/js/app.js"></script>
     <%- include('../../partials/footer.ejs') %>
