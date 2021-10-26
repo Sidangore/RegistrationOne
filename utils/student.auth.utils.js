@@ -3,10 +3,15 @@ const jwt = require('jsonwebtoken'); // the jwt functionality
 const Student = require('../models/student.model');
 const { success, error } = require('consola');
 const { SECRET } = require('../config');
+const net = require('net');
 
 const Web3 = require('web3');
-const web3 = new Web3('HTTP://127.0.0.1:7545');
 
+const web3 = new Web3('HTTP://127.0.0.1:7545');
+// const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+// const web3 = new Web3('https://ropsten.infura.io/v3/1815651cbc7440fca737ecf87905dd31');
+// const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/1815651cbc7440fca737ecf87905dd31"));
+// const web3 = new Web3(new Web3.providers.IpcProvider("HTTP://127.0.0.1:7545", net));
 
 const PublicAddress = require('../models/address_list.model');
 
@@ -126,6 +131,26 @@ const student_login = async(student_details, res) => {
             }, SECRET, {
                 expiresIn: "7 days"
             });
+
+            //sign the metamask message to authenticate self
+            // web3.eth.personal.sign('12345', student.public_address, (error, signature) => {
+            //     if (error) {
+            //         console.log(error);
+            //         return;
+            //     }
+            //     console.log(student.public_address, signature);
+            // });
+
+            //working
+            await web3.eth.getBalance(student.public_address, function(err, result) {
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log(web3.utils.fromWei(result, "ether") + " ETH")
+                }
+            });
+            // console.log('WEB3###');
+            // console.log(await web3.eth.personal.sign);
 
             let result = {
                 email: student.email,
