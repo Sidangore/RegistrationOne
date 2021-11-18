@@ -4,6 +4,8 @@ const Student = require('../models/student.model');
 const { success, error } = require('consola');
 const { SECRET } = require('../config');
 const net = require('net');
+const eth_sig_util = require('eth-sig-util');
+
 
 const Web3 = require('web3');
 
@@ -141,17 +143,6 @@ const student_login = async(student_details, res) => {
             //     console.log(student.public_address, signature);
             // });
 
-            //working
-            await web3.eth.getBalance(student.public_address, function(err, result) {
-                if (err) {
-                    console.log(err)
-                } else {
-                    console.log(web3.utils.fromWei(result, "ether") + " ETH")
-                }
-            });
-            // console.log('WEB3###');
-            // console.log(await web3.eth.personal.sign);
-
             let result = {
                 email: student.email,
                 role: student.role,
@@ -197,11 +188,6 @@ const validate_public_address = async(public_address) => {
     });
     return student ? true : false;
 };
-
-// add the public address to common DB of registered address
-// const add_public_address = async(public_address) => {
-
-// };
 
 module.exports = {
     student_registration,
