@@ -136,6 +136,7 @@ const validate_email = async(email) => {
     });
     return school ? true : false;
 };
+
 module.exports = {
     school_registration,
     school_login
